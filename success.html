@@ -1,37 +1,63 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8"><title>Finality</title>
+    <meta charset="UTF-8">
+    <title>Forever</title>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
-        body { margin: 0; background: #000; overflow: hidden; display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100vh; font-family: 'serif'; }
-        h1 { color: #fbbf24; font-weight: 100; font-size: 4rem; letter-spacing: 15px; z-index: 10; text-transform: uppercase; }
-        p { color: #888; letter-spacing: 5px; font-size: 0.7rem; z-index: 10; margin-top: 20px; text-transform: uppercase; }
+        body { 
+            margin: 0; height: 100vh; 
+            background: #fff5f7; display: flex; flex-direction: column; 
+            justify-content: center; align-items: center; 
+            font-family: 'Arial Rounded MT Bold', sans-serif; overflow: hidden;
+        }
+
+        .card { text-align: center; animation: pop 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        @keyframes pop { from { transform: scale(0); } to { transform: scale(1); } }
+
+        h1 { color: #ff4d7d; font-size: 4rem; margin: 0; }
+        p { color: #ff85a2; font-size: 1.5rem; margin-top: 15px; }
+        .heart { font-size: 5rem; animation: beat 1s infinite; margin-bottom: 20px; }
+        
+        @keyframes beat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
     </style>
 </head>
 <body>
-    <h1>Always</h1>
-    <p>The journey begins now.</p>
+
+    <div class="card">
+        <div class="heart">💖</div>
+        <h1>Yay! ❤️</h1>
+        <p>You just made me the happiest person, Arshiya.</p>
+    </div>
     
     <script>
-        // High-end Gold Confetti
+        // Pink & White Confetti
         const end = Date.now() + (10 * 1000);
-        const colors = ['#fbbf24', '#f59e0b', '#ffffff'];
+        const colors = ['#ff4d7d', '#ffdee9', '#ffffff', '#ff85a2'];
 
         (function frame() {
-          confetti({ particleCount: 2, angle: 60, spread: 55, origin: { x: 0 }, colors: colors });
-          confetti({ particleCount: 2, angle: 120, spread: 55, origin: { x: 1 }, colors: colors });
+          confetti({ particleCount: 4, angle: 60, spread: 55, origin: { x: 0 }, colors: colors });
+          confetti({ particleCount: 4, angle: 120, spread: 55, origin: { x: 1 }, colors: colors });
           if (Date.now() < end) requestAnimationFrame(frame);
         }());
 
-        // Create a Slow Cinematic Fade In
-        document.body.style.opacity = 0;
-        let opacity = 0;
-        const fadeIn = setInterval(() => {
-            if (opacity >= 1) clearInterval(fadeIn);
-            document.body.style.opacity = opacity;
-            opacity += 0.01;
-        }, 20);
+        // Heart-shaped confetti burst on start
+        confetti({
+            particleCount: 150,
+            spread: 70,
+            origin: { y: 0.6 },
+            colors: ['#ff4d7d', '#ff2e63']
+        });
+
+        // Continue Music
+        if (sessionStorage.getItem('musicPlaying') === 'true') {
+            const audio = new Audio('yellow.mp3');
+            audio.loop = true;
+            audio.play();
+        }
     </script>
 </body>
 </html>
