@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"><title>Note</title>
+    <style>
+        body { margin: 0; height: 100vh; background: #fffaf0; display: flex; justify-content: center; align-items: center; font-family: 'Georgia', serif; }
+        .paper { background: white; padding: 50px; border-radius: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); max-width: 400px; color: #78350f; }
+        .btn { margin-top: 20px; padding: 10px 20px; background: #fbbf24; color: white; border: none; border-radius: 50px; cursor: pointer; display: none; }
+    </style>
+</head>
+<body>
+    <div class="paper"><div id="type"></div><button class="btn" id="b" onclick="window.location.href='stars.html'">Next ✨</button></div>
+    <audio id="bg-music" loop><source src="yellow.mp3" type="audio/mpeg"></audio>
+    <script>
+        if (sessionStorage.getItem('musicPlaying') === 'true') document.getElementById('bg-music').play();
+        const msg = "Arshiya, they say look at the stars, look how they shine for you. I wanted to build this to show you that you're the brightest light I know.";
+        let i = 0; function type() { if(i<msg.length) { document.getElementById('type').innerHTML += msg.charAt(i); i++; setTimeout(type, 50); } else document.getElementById('b').style.display='block'; }
+        type();
+    </script>
+</body>
+</html>

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"><title>For Arshiya</title>
+    <style>
+        body { margin: 0; height: 100vh; background: #020617; display: flex; flex-direction: column; justify-content: center; align-items: center; overflow: hidden; font-family: 'Arial Rounded MT Bold', sans-serif; }
+        .sun { width: 120px; height: 120px; background: #fbbf24; border-radius: 50%; box-shadow: 0 0 60px #fbbf24; cursor: pointer; transition: 1.5s; display: flex; justify-content: center; align-items: center; font-size: 50px; }
+        .sun:hover { transform: scale(1.2); box-shadow: 0 0 100px #fbbf24; }
+        .text { color: #fbbf24; margin-top: 30px; letter-spacing: 5px; font-size: 14px; opacity: 0.8; animation: blink 2s infinite; }
+        @keyframes blink { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
+    </style>
+</head>
+<body onclick="start()">
+    <div class="sun">☀️</div>
+    <div class="text">TAP TO LIGHT UP HER WORLD</div>
+    <audio id="bg-music" loop><source src="yellow.mp3" type="audio/mpeg"></audio>
+    <script>
+        function start() {
+            const a = document.getElementById('bg-music');
+            a.play();
+            sessionStorage.setItem('musicPlaying', 'true');
+            document.querySelector('.sun').style.transform = "scale(100)";
+            setTimeout(() => { window.location.href = 'intro.html'; }, 1000);
+        }
+    </script>
+</body>
+</html>

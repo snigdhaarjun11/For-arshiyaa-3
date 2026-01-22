@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"><title>Your Ticket</title>
+    <style>
+        body { margin: 0; height: 100vh; background: #FFF9E3; display: flex; flex-direction: column; justify-content: center; align-items: center; font-family: sans-serif; }
+        .container { position: relative; width: 350px; height: 200px; }
+        .base { position: absolute; width: 100%; height: 100%; background: #fbbf24; border-radius: 15px; display: flex; justify-content: center; align-items: center; border: 2px dashed #78350f; text-align: center; }
+        canvas { position: absolute; top: 0; left: 0; border-radius: 15px; cursor: crosshair; touch-action: none; }
+        .btn { margin-top: 30px; padding: 15px 30px; background: #fbbf24; color: white; border: none; border-radius: 50px; cursor: pointer; display: none; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="base"><div><h2 style="color:#78350f">ADMIT ONE: ARSHIYA</h2><p>Special Access Granted ❤️</p></div></div>
+        <canvas id="canvas" width="350" height="200"></canvas>
+    </div>
+    <button class="btn" id="btn" onclick="window.location.href='lobby.html'">Step Inside →</button>
+    <audio id="bg-music" loop><source src="yellow.mp3" type="audio/mpeg"></audio>
+    <script>
+        if (sessionStorage.getItem('musicPlaying') === 'true') document.getElementById('bg-music').play();
+        const cvs = document.getElementById('canvas'); const ctx = cvs.getContext('2d');
+        ctx.fillStyle = '#C0C0C0'; ctx.fillRect(0,0,350,200);
+        ctx.globalCompositeOperation = 'destination-out';
+        function scratch(e) {
+            const r = cvs.getBoundingClientRect();
+            const x = (e.clientX || e.touches[0].clientX) - r.left;
+            const y = (e.clientY || e.touches[0].clientY) - r.top;
+            ctx.beginPath(); ctx.arc(x, y, 25, 0, Math.PI*2); ctx.fill();
+            document.getElementById('btn').style.display = 'block';
+        }
+        cvs.addEventListener('mousemove', (e) => { if(e.buttons === 1) scratch(e); });
+        cvs.addEventListener('touchmove', (e) => { e.preventDefault(); scratch(e); });
+    </script>
+</body>
+</html>

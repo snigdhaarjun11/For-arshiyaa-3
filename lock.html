@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>The Vault</title>
+    <style>
+        :root { --gold: #fbbf24; --bg: #0a0a0a; }
+        body { margin: 0; height: 100vh; background: var(--bg); display: flex; flex-direction: column; justify-content: center; align-items: center; overflow: hidden; font-family: 'Helvetica Neue', sans-serif; }
+
+        /* The Lock / Vault Door */
+        #lock-container {
+            width: 200px; height: 200px; border-radius: 50%;
+            border: 2px solid #222; display: flex; justify-content: center;
+            align-items: center; font-size: 80px; position: relative;
+            background: radial-gradient(circle, #1a1a1a 0%, #050505 100%);
+            box-shadow: 0 0 50px rgba(0,0,0,0.5), inset 0 0 20px rgba(251, 191, 36, 0.05);
+            transition: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* The Key */
+        #key {
+            font-size: 50px; cursor: grab; position: absolute;
+            bottom: 15%; z-index: 100; filter: drop-shadow(0 0 10px rgba(251, 191, 36, 0.3));
+            user-select: none; touch-action: none;
+        }
+
+        #key:active { cursor: grabbing; scale: 1.1; }
+
+        /* Glowing Ring when Key is near */
+        .glow { box-shadow: 0 0 80px rgba(251, 191, 36, 0.2) !important; border-color: var(--gold) !important; }
+
+        .hint { margin-top: 40px; color: #444; letter-spacing: 4px; font-size: 0.7rem; text-transform: uppercase; }
+        
+        #bg-music { display: none; }
+    </style>
+</head>
+<body>
+
+    <div id="lock-container">🔒</div>
+    <div id="key">🔑</div>
+    <div class="hint">Place the key to enter</div>
+
+    <audio id="bg-music" loop><source src="yellow.mp3" type="audio/mpeg"></audio>
+
+    <script>
+        const key = document.getElementById('key');
+        const lock = document.getElementById('lock-container');
+        let isDragging = false;
+
+        // Positioning Logic
+        let offset = { x: 0, y: 0 };
+
+        function onStart(e) {
+            isDragging = true;
+            const clientX = e.clientX || e.touches[0].clientX;
+            const clientY = e.clientY || e.touches[0].clientY;
+            offset.x = clientX - key.offsetLeft;
+            offset.y = clientY - key.offsetTop;
+            key.style.transition = 'none';
+        }
+
+        function onMove(e) {
+            if (!isDragging) return;
+            const clientX = e.clientX || e.touches[0].clientX;
+            const clientY = e.clientY || e.touches[0].clientY;
+            
+            key.style.left = (clientX - offset.x) + 'px';
+            key.style.top = (clientY - offset.y) + 'px';
+
+            // Check proximity for glow effect
+            const lockRect = lock.getBoundingClientRect();
+            const keyRect = key.getBoundingClientRect();
+            const distance = Math.hypot(lockRect.x - keyRect.x, lockRect.y - keyRect.y);
+            
+            if (distance < 150) lock.classList.add('glow');
+            else lock.classList.remove('glow');
+        }
+
+        function onEnd() {
+            if (!isDragging) return;
+            isDragging = false;
+            
+            const lockRect = lock.getBoundingClientRect();
+            const keyRect = key.getBoundingClientRect();
+
+            // Collision Detection
+            if (
+                keyRect.left < lockRect.right &&
+                keyRect.right > lockRect.left &&
+                keyRect.top < lockRect.bottom &&
+                keyRect.bottom > lockRect.top
+            ) {
+                // Success
+                lock.innerHTML = "🔓";
+                lock.style.transform = "scale(1.2)";
+                lock.style.borderColor = "#fbbf24";
+                key.style.display = "none";
+                setTimeout(() => {
+                    window.location.href = 'ticket.html';
+                }, 800);
+            } else {
+                // Snap back if missed
+                key.style.transition = '0.5s';
+                key.style.left = '50%';
+                key.style.top = '80%';
+                key.style.transform = 'translateX(-50%)';
+            }
+        }
+
+        // Mouse Events
+        key.addEventListener('mousedown', onStart);
+        window.addEventListener('mousemove', onMove);
+        window.addEventListener('mouseup', onEnd);
+
+        // Touch Events
+        key.addEventListener('touchstart', onStart);
+        window.addEventListener('touchmove', onMove);
+        window.addEventListener('touchend', onEnd);
+
+        // Continuous Music
+        if (sessionStorage.getItem('musicPlaying') === 'true') {
+            document.getElementById('bg-music').play().catch(() => {});
+        }
+    </script>
+</body>
+</html>

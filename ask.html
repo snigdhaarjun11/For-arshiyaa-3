@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"><title>The Question</title>
+    <style>
+        body { margin: 0; height: 100vh; background: #0a0a0a; color: #fff; overflow: hidden; font-family: 'optima', 'serif'; display: flex; justify-content: center; align-items: center; }
+        canvas { position: absolute; top: 0; left: 0; z-index: 1; }
+        .content { position: relative; z-index: 10; text-align: center; pointer-events: none; }
+        h1 { font-weight: 100; font-size: 3rem; letter-spacing: 8px; text-transform: uppercase; margin-bottom: 50px; color: #fbbf24; text-shadow: 0 0 20px rgba(251, 191, 36, 0.4); }
+        .buttons { pointer-events: all; display: flex; gap: 40px; justify-content: center; }
+        .btn { padding: 15px 40px; border: 1px solid #fbbf24; background: none; color: #fbbf24; cursor: pointer; letter-spacing: 3px; transition: 0.5s; text-transform: uppercase; font-size: 0.8rem; }
+        #yes:hover { background: #fbbf24; color: #000; box-shadow: 0 0 30px #fbbf24; }
+        #no { border: 1px solid #444; color: #444; }
+    </style>
+</head>
+<body>
+    <canvas id="bg"></canvas>
+    <div class="content">
+        <h1>Arshiya</h1>
+        <div class="buttons">
+            <button class="btn" id="yes" onclick="window.location.href='success.html'">Yes</button>
+            <button class="btn" id="no" onmouseover="vanish()">No</button>
+        </div>
+    </div>
+
+    <script>
+        // Floating 3D Gold Dust
+        const canvas = document.getElementById('bg');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2 + 1;
+                this.speedX = Math.random() * 0.5 - 0.25;
+                this.speedY = Math.random() * 0.5 - 0.25;
+            }
+            update() { this.x += this.speedX; this.y += this.speedY; }
+            draw() {
+                ctx.fillStyle = 'rgba(251, 191, 36, 0.3)';
+                ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI*2); ctx.fill();
+            }
+        }
+
+        for(let i=0; i<100; i++) particles.push(new Particle());
+        function animate() {
+            ctx.clearRect(0,0,canvas.width, canvas.height);
+            particles.forEach(p => { p.update(); p.draw(); });
+            requestAnimationFrame(animate);
+        }
+        animate();
+
+        function vanish() {
+            const no = document.getElementById('no');
+            no.style.opacity = '0';
+            setTimeout(() => {
+                no.style.left = Math.random()*80+'vw';
+                no.style.top = Math.random()*80+'vh';
+                no.style.position = 'fixed';
+                no.style.opacity = '1';
+            }, 300);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Moments</title>
+    <style>
+        body { margin: 0; height: 100vh; background: #fafafa; display: flex; justify-content: center; align-items: center; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; overflow: hidden; color: #333; }
+        
+        .gallery { display: flex; gap: 20px; z-index: 10; padding: 20px; }
+
+        /* The Cards */
+        .card {
+            width: 280px; height: 380px; background: white; border-radius: 2px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05); padding: 15px;
+            transition: 0.5s cubic-bezier(0.2, 1, 0.3, 1); cursor: pointer;
+            display: flex; flex-direction: column; position: relative;
+        }
+
+        .card:hover { transform: translateY(-20px) scale(1.02); box-shadow: 0 30px 60px rgba(0,0,0,0.1); }
+
+        /* Modern Image Placeholder */
+        .image-box { 
+            flex-grow: 1; background: #f0f0f0; border-radius: 1px; 
+            display: flex; justify-content: center; align-items: center; font-size: 40px;
+            filter: grayscale(100%); transition: 0.5s;
+        }
+        
+        .card:hover .image-box { filter: grayscale(0%); background: #fff9e3; }
+
+        /* Minimal Text */
+        .card h3 { font-weight: 300; letter-spacing: 2px; font-size: 0.8rem; margin: 20px 0 5px 0; text-transform: uppercase; color: #888; }
+        .card p { font-size: 1.1rem; margin: 0; color: #222; font-style: italic; }
+
+        /* Background Particle Text */
+        .bg-text {
+            position: absolute; font-size: 15vw; font-weight: 900; 
+            color: rgba(0,0,0,0.02); white-space: nowrap; pointer-events: none; z-index: 1;
+        }
+
+        .btn-minimal {
+            position: fixed; bottom: 40px; padding: 12px 30px; 
+            background: none; border: 1px solid #333; border-radius: 0; 
+            cursor: pointer; text-transform: uppercase; letter-spacing: 3px; font-size: 0.7rem;
+            transition: 0.4s; z-index: 10;
+        }
+        .btn-minimal:hover { background: #333; color: white; }
+    </style>
+</head>
+<body>
+
+    <div class="bg-text">COLLECTED MOMENTS</div>
+
+    <div class="gallery">
+        <div class="card" style="transform: rotate(-1deg)">
+            <div class="image-box">✧</div>
+            <h3>Perspective</h3>
+            <p>The first impression.</p>
+        </div>
+
+        <div class="card" style="transform: rotate(2deg)">
+            <div class="image-box">☀︎</div>
+            <h3>Radiance</h3>
+            <p>Your unique energy.</p>
+        </div>
+
+        <div class="card" style="transform: rotate(-2deg)">
+            <div class="image-box">☁︎</div>
+            <h3>Vibe</h3>
+            <p>Unfiltered & genuine.</p>
+        </div>
+    </div>
+
+    <button class="btn-minimal" onclick="window.location.href='garden.html'">Continue the Journey</button>
+
+    <audio id="bg-music" loop><source src="yellow.mp3" type="audio/mpeg"></audio>
+
+    <script>
+        // Music Persistence
+        const audio = document.getElementById('bg-music');
+        if (sessionStorage.getItem('musicPlaying') === 'true') {
+            audio.play().catch(e => console.log("Waiting for user interaction"));
+        }
+
+        // Slight Mouse Follower Effect for Cards
+        document.addEventListener('mousemove', (e) => {
+            const cards = document.querySelectorAll('.card');
+            const x = (window.innerWidth / 2 - e.pageX) / 50;
+            const y = (window.innerHeight / 2 - e.pageY) / 50;
+            cards.forEach(card => {
+                card.style.boxShadow = `${x}px ${y}px 30px rgba(0,0,0,0.05)`;
+            });
+        });
+    </script>
+</body>
+</html>

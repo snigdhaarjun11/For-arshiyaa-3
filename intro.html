@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"><title>Lobby</title>
+    <style>
+        body { margin: 0; height: 100vh; background: linear-gradient(135deg, #FFF0F5, #FFF9E3); display: flex; justify-content: center; align-items: center; font-family: sans-serif; }
+        .glass { background: rgba(255,255,255,0.4); backdrop-filter: blur(15px); border-radius: 40px; padding: 50px; display: flex; gap: 40px; border: 1px solid rgba(255,255,255,0.6); }
+        .item { font-size: 70px; cursor: pointer; transition: 0.3s; }
+        .item:hover { transform: scale(1.2) translateY(-10px); }
+        #vinyl { position: fixed; top: 20px; right: 20px; width: 50px; height: 50px; border-radius: 50%; background: #333; border: 3px solid #fbbf24; animation: spin 3s linear infinite; cursor: pointer; display: flex; justify-content: center; align-items: center; }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+    <div id="vinyl" onclick="toggle()">💿</div>
+    <div class="glass">
+        <div class="item" onclick="window.location.href='letter.html'">💌</div>
+        <div class="item" onclick="window.location.href='stars.html'">⭐</div>
+        <div class="item" onclick="window.location.href='memories.html'">📸</div>
+        <div class="item" onclick="window.location.href='garden.html'">🌻</div>
+    </div>
+    <audio id="bg-music" loop><source src="yellow.mp3" type="audio/mpeg"></audio>
+    <script>
+        const a = document.getElementById('bg-music');
+        if (sessionStorage.getItem('musicPlaying') === 'true') a.play();
+        function toggle() { if(a.paused) { a.play(); sessionStorage.setItem('musicPlaying','true'); } else { a.pause(); sessionStorage.setItem('musicPlaying','false'); } }
+    </script>
+</body>
+</html>

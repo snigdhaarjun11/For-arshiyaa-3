@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>The Meadow</title>
+    <style>
+        :root { --meadow-green: #2d5a27; --sky-blue: #e0f7fa; }
+        body { margin: 0; height: 100vh; background: linear-gradient(to bottom, var(--sky-blue), #ffffff); overflow: hidden; cursor: crosshair; font-family: 'Helvetica Neue', sans-serif; }
+        
+        /* Ambient Grass */
+        .grass-blade { position: absolute; bottom: 0; background: #4caf50; width: 2px; border-radius: 2px 2px 0 0; opacity: 0.6; pointer-events: none; }
+
+        /* The Flower */
+        .stem { position: absolute; bottom: 0; background: #8bc34a; width: 3px; transform-origin: bottom; animation: grow-stem 0.8s ease-out forwards; }
+        .flower-head { position: absolute; transform: scale(0); animation: bloom 0.6s 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; cursor: default; }
+        
+        @keyframes grow-stem { from { height: 0; } to { height: var(--h); } }
+        @keyframes bloom { from { transform: scale(0) rotate(0deg); } to { transform: scale(1) rotate(var(--r)); } }
+
+        .butterfly { position: absolute; font-size: 20px; pointer-events: none; z-index: 10; transition: 2s linear; opacity: 0.8; }
+
+        .ui-layer { position: fixed; top: 40px; width: 100%; text-align: center; z-index: 100; pointer-events: none; }
+        .ui-layer h1 { font-weight: 300; letter-spacing: 5px; color: #5d4037; font-size: 1rem; text-transform: uppercase; }
+        
+        .btn-minimal {
+            position: fixed; bottom: 40px; left: 50%; transform: translateX(-50%);
+            padding: 15px 40px; background: white; border: 1px solid #5d4037;
+            color: #5d4037; letter-spacing: 3px; font-size: 0.7rem; cursor: pointer;
+            transition: 0.3s; z-index: 100; text-transform: uppercase;
+        }
+        .btn-minimal:hover { background: #5d4037; color: white; border-radius: 50px; }
+    </style>
+</head>
+<body onclick="plantFlower(event)">
+
+    <div class="ui-layer"><h1>Tap to plant a meadow for Arshiya</h1></div>
+    <button class="btn-minimal" onclick="window.location.href='bouquet.html'">Gather the Bouquet</button>
+
+    <audio id="bg-music" loop><source src="yellow.mp3" type="audio/mpeg"></audio>
+
+    <script>
+        // Music Persistence
+        const audio = document.getElementById('bg-music');
+        if (sessionStorage.getItem('musicPlaying
