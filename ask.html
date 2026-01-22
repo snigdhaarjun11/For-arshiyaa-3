@@ -1,68 +1,66 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8"><title>The Question</title>
+    <meta charset="UTF-8">
+    <title>A Special Question</title>
     <style>
-        body { margin: 0; height: 100vh; background: #0a0a0a; color: #fff; overflow: hidden; font-family: 'optima', 'serif'; display: flex; justify-content: center; align-items: center; }
-        canvas { position: absolute; top: 0; left: 0; z-index: 1; }
-        .content { position: relative; z-index: 10; text-align: center; pointer-events: none; }
-        h1 { font-weight: 100; font-size: 3rem; letter-spacing: 8px; text-transform: uppercase; margin-bottom: 50px; color: #fbbf24; text-shadow: 0 0 20px rgba(251, 191, 36, 0.4); }
-        .buttons { pointer-events: all; display: flex; gap: 40px; justify-content: center; }
-        .btn { padding: 15px 40px; border: 1px solid #fbbf24; background: none; color: #fbbf24; cursor: pointer; letter-spacing: 3px; transition: 0.5s; text-transform: uppercase; font-size: 0.8rem; }
-        #yes:hover { background: #fbbf24; color: #000; box-shadow: 0 0 30px #fbbf24; }
-        #no { border: 1px solid #444; color: #444; }
+        body { 
+            margin: 0; height: 100vh; 
+            background: linear-gradient(135deg, #fff5f7 0%, #ffdee9 100%);
+            display: flex; flex-direction: column; justify-content: center; 
+            align-items: center; overflow: hidden; font-family: 'Arial Rounded MT Bold', sans-serif; 
+        }
+
+        .container { text-align: center; z-index: 10; background: rgba(255,255,255,0.3); padding: 50px; border-radius: 40px; backdrop-filter: blur(10px); border: 2px solid white; }
+
+        h1 { 
+            color: #d63384; font-size: 2.8rem; line-height: 1.4;
+            margin-bottom: 40px; text-shadow: 2px 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .btn-wrap { display: flex; gap: 30px; justify-content: center; align-items: center; }
+
+        .btn-yes {
+            padding: 18px 50px; background: #ff4d7d; color: white;
+            border: none; font-size: 1.2rem; cursor: pointer;
+            border-radius: 50px; font-weight: bold; transition: 0.3s;
+            box-shadow: 0 10px 20px rgba(255, 77, 125, 0.3);
+        }
+        .btn-yes:hover { transform: scale(1.1); background: #ff2e63; }
+
+        .btn-no {
+            padding: 12px 30px; background: white; color: #ff85a2;
+            border: 2px solid #ff85a2; border-radius: 50px; cursor: pointer;
+            transition: 0.1s; position: relative;
+        }
+
+        /* Sparkle Animation */
+        .sparkle { position: absolute; pointer-events: none; animation: floatUp 4s linear infinite; opacity: 0; }
+        @keyframes floatUp {
+            0% { transform: translateY(0) scale(0); opacity: 0; }
+            50% { opacity: 0.8; }
+            100% { transform: translateY(-100vh) scale(1.5); opacity: 0; }
+        }
     </style>
 </head>
 <body>
-    <canvas id="bg"></canvas>
-    <div class="content">
-        <h1>Arshiya</h1>
-        <div class="buttons">
-            <button class="btn" id="yes" onclick="window.location.href='success.html'">Yes</button>
-            <button class="btn" id="no" onmouseover="vanish()">No</button>
+
+    <div class="container">
+        <h1>Arshiya, <br> Let me be your girlfriend? 🌸</h1>
+        <div class="btn-wrap">
+            <button class="btn-yes" onclick="window.location.href='success.html'">Yes! ❤️</button>
+            <button class="btn-no" id="noBtn" onmouseover="dodge()">No</button>
         </div>
     </div>
 
+    <audio id="bg-music" loop><source src="yellow.mp3" type="audio/mpeg"></audio>
+
     <script>
-        // Floating 3D Gold Dust
-        const canvas = document.getElementById('bg');
-        const ctx = canvas.getContext('2d');
-        let particles = [];
-        canvas.width = window.innerWidth; canvas.height = window.innerHeight;
-
-        class Particle {
-            constructor() {
-                this.x = Math.random() * canvas.width;
-                this.y = Math.random() * canvas.height;
-                this.size = Math.random() * 2 + 1;
-                this.speedX = Math.random() * 0.5 - 0.25;
-                this.speedY = Math.random() * 0.5 - 0.25;
-            }
-            update() { this.x += this.speedX; this.y += this.speedY; }
-            draw() {
-                ctx.fillStyle = 'rgba(251, 191, 36, 0.3)';
-                ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI*2); ctx.fill();
-            }
-        }
-
-        for(let i=0; i<100; i++) particles.push(new Particle());
-        function animate() {
-            ctx.clearRect(0,0,canvas.width, canvas.height);
-            particles.forEach(p => { p.update(); p.draw(); });
-            requestAnimationFrame(animate);
-        }
-        animate();
-
-        function vanish() {
-            const no = document.getElementById('no');
-            no.style.opacity = '0';
-            setTimeout(() => {
-                no.style.left = Math.random()*80+'vw';
-                no.style.top = Math.random()*80+'vh';
-                no.style.position = 'fixed';
-                no.style.opacity = '1';
-            }, 300);
-        }
-    </script>
-</body>
-</html>
+        // "No" button dodging
+        const noBtn = document.getElementById('noBtn');
+        function dodge() {
+            const x = Math.random() * (window.innerWidth - 100);
+            const y = Math.random() * (window.innerHeight - 50);
+            noBtn.style.position = 'fixed';
+            noBtn.style.left = x + 'px';
+            no
