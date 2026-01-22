@@ -4,41 +4,91 @@
     <meta charset="UTF-8">
     <title>The Meadow</title>
     <style>
-        :root { --meadow-green: #2d5a27; --sky-blue: #e0f7fa; }
-        body { margin: 0; height: 100vh; background: linear-gradient(to bottom, var(--sky-blue), #ffffff); overflow: hidden; cursor: crosshair; font-family: 'Helvetica Neue', sans-serif; }
+        body { margin: 0; padding: 0; background: #fafafa; overflow: hidden; font-family: 'Helvetica Neue', sans-serif; cursor: crosshair; }
         
-        /* Ambient Grass */
-        .grass-blade { position: absolute; bottom: 0; background: #4caf50; width: 2px; border-radius: 2px 2px 0 0; opacity: 0.6; pointer-events: none; }
+        /* The Drawing Surface */
+        #meadowCanvas { position: absolute; top: 0; left: 0; z-index: 1; }
 
-        /* The Flower */
-        .stem { position: absolute; bottom: 0; background: #8bc34a; width: 3px; transform-origin: bottom; animation: grow-stem 0.8s ease-out forwards; }
-        .flower-head { position: absolute; transform: scale(0); animation: bloom 0.6s 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; cursor: default; }
-        
-        @keyframes grow-stem { from { height: 0; } to { height: var(--h); } }
-        @keyframes bloom { from { transform: scale(0) rotate(0deg); } to { transform: scale(1) rotate(var(--r)); } }
+        .ui {
+            position: fixed; top: 40px; width: 100%; text-align: center;
+            z-index: 10; pointer-events: none;
+            text-transform: uppercase; letter-spacing: 5px; color: #555; font-size: 0.8rem;
+        }
 
-        .butterfly { position: absolute; font-size: 20px; pointer-events: none; z-index: 10; transition: 2s linear; opacity: 0.8; }
-
-        .ui-layer { position: fixed; top: 40px; width: 100%; text-align: center; z-index: 100; pointer-events: none; }
-        .ui-layer h1 { font-weight: 300; letter-spacing: 5px; color: #5d4037; font-size: 1rem; text-transform: uppercase; }
-        
         .btn-minimal {
             position: fixed; bottom: 40px; left: 50%; transform: translateX(-50%);
-            padding: 15px 40px; background: white; border: 1px solid #5d4037;
-            color: #5d4037; letter-spacing: 3px; font-size: 0.7rem; cursor: pointer;
-            transition: 0.3s; z-index: 100; text-transform: uppercase;
+            padding: 15px 40px; background: #fff; border: 1px solid #333;
+            color: #333; letter-spacing: 3px; font-size: 0.7rem; cursor: pointer;
+            transition: 0.3s; z-index: 20; text-transform: uppercase;
         }
-        .btn-minimal:hover { background: #5d4037; color: white; border-radius: 50px; }
+        .btn-minimal:hover { background: #333; color: #fff; }
     </style>
 </head>
-<body onclick="plantFlower(event)">
+<body>
 
-    <div class="ui-layer"><h1>Tap to plant a meadow for Arshiya</h1></div>
-    <button class="btn-minimal" onclick="window.location.href='bouquet.html'">Gather the Bouquet</button>
+    <div class="ui"><h1>Tap to grow a garden for Arshiya</h1></div>
+    <canvas id="meadowCanvas"></canvas>
+    <button class="btn-minimal" onclick="window.location.href='bouquet.html'">Continue</button>
 
     <audio id="bg-music" loop><source src="yellow.mp3" type="audio/mpeg"></audio>
 
     <script>
-        // Music Persistence
+        const canvas = document.getElementById('meadowCanvas');
+        const ctx = canvas.getContext('2d');
+        const flowers = ['🌻', '🌸', '🌷', '🌼', '🌺'];
+
+        function resize() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.onresize = resize;
+        resize();
+
+        function plantFlower(e) {
+            // Get mouse/touch coordinates
+            const x = e.clientX || (e.touches ? e.touches[0].clientX : 0);
+            const y = e.clientY || (e.touches ? e.touches[0].clientY : 0);
+            
+            if (y > window.innerHeight - 100) return; // Prevent planting over button
+
+            const flower = flowers[Math.floor(Math.random() * flowers.length)];
+            const stemHeight = window.innerHeight - y;
+
+            growFlower(x, window.innerHeight, y, flower);
+        }
+
+        function growFlower(x, startY, endY, emoji) {
+            let currentY = startY;
+            const speed = 8;
+
+            function animate() {
+                if (currentY > endY) {
+                    // Draw the green stem
+                    ctx.strokeStyle = '#8bc34a';
+                    ctx.lineWidth = 2;
+                    ctx.beginPath();
+                    ctx.moveTo(x, currentY);
+                    ctx.lineTo(x, currentY - speed);
+                    ctx.stroke();
+
+                    currentY -= speed;
+                    requestAnimationFrame(animate);
+                } else {
+                    // Draw the flower head once stem is done
+                    ctx.font = '30px serif';
+                    ctx.textAlign = 'center';
+                    ctx.fillText(emoji, x, endY);
+                }
+            }
+            animate();
+        }
+
+        window.addEventListener('mousedown', plantFlower);
+        window.addEventListener('touchstart', (e) => { e.preventDefault(); plantFlower(e); });
+
+        // Music
         const audio = document.getElementById('bg-music');
-        if (sessionStorage.getItem('musicPlaying
+        if (sessionStorage.getItem('musicPlaying') === 'true') audio.play();
+    </script>
+</body>
+</html>
